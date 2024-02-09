@@ -4,13 +4,19 @@
         "port": 443,
         "certPath": "./certs/fullchain.pem",
         "keyPath": "./certs/privkey.pem",
+        "authUrl": "https://example.com/api/auth/jwt/${ACCESS_TOKEN}",
         "mappings": [
             {
                 "uriPattern": "/webapp",
                 "target": "http://10.0.0.200:8080"
             },{
                 "uriPattern": "/api/webapp-svc",
-                "target": "http://10.0.0.200:8081"
+                "target": "http://10.0.0.200:8081",
+                "alwaysAuth": true
+            },{
+                "uriPattern": "/api/auth",
+                "target": "http://10.0.0.200:8082",
+                "alwaysAuth": true
             }
         ]
     }
