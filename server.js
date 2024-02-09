@@ -11,7 +11,7 @@ if (process.argv.length !== 3) {
 const configJSON = fs.readFileSync(process.argv[2]);
 const servers = JSON.parse(configJSON);
 
-servers.forEach(({mappings, hostname, port, keyPath, certPath}) => {
+servers.forEach(({mappings, hostname, port, keyPath, certPath, authUrl}) => {
     const sslOptions = {
         key: fs.readFileSync(keyPath, 'utf-8'),
         cert: fs.readFileSync(certPath, 'utf-8')
@@ -35,7 +35,7 @@ servers.forEach(({mappings, hostname, port, keyPath, certPath}) => {
                 if (alwaysAuth === true || req.headers['x-access-token']) {
                     console.log('\tFETCHING ID CLAIM');
                     try {
-                        let {data: {jwtToken}} = await axios.get(`https://deusprogrammer.com/api/auth-svc/auth/${req.headers['x-access-token']}`);
+                        let {data: {jwtToken}} = await axios.get(authUrl.replace("${ACCESS_TOKEN}", req.headers['x-access-token']));
                         req.headers['authorization'] = `Bearer ${jwtToken}`;
                     } catch (err) {
                         console.error(`\t${err}`);
